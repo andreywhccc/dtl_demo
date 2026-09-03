@@ -1,0 +1,1 @@
+${GUA_PRJ}/verif/ip_tb/dtl_top_demo/rtl/top/chiptop.v

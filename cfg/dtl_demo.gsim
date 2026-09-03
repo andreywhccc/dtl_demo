@@ -1,0 +1,80 @@
+build:
+  common:
+    VLOG_CMP_OPTS:
+      - COM_OPTS: -full64 -sverilog -timescale=1ns/1ps -noinherit_timescale=1ns/1ps
+    VHDL_CMP_OPTS:
+    TST_CMP_OPTS:
+      - TST_OPTS: -full64 -sverilog -timescale=1ns/1ps -error=noMPD -xlrm floating_pnt_constraint +define+DESIGNWARE=$DESIGNWARE_HOME +define+DESIGNWARE_INCDIR=$DESIGNWARE_HOME
+    ELAB_OPTS:
+      - -full64 -sverilog -ntb_opts uvm-1.1 +notimingchecks +nospecify
+    CMODEL_OPTS:
+
+  design:
+  verif:
+    dtl_top_demo:
+      com_opts: -full64 -sverilog -kdb=common_elab
+      verif_flist: ${GUA_PRJ}/verif/ip_tb/dtl_top_demo/tst_top_base.f
+      dtl_flist: ${GUA_PRJ}/verif/ip_tb/dtl_top_demo/tst_top_sub.f
+      vhdl_flist:
+      vlog_flist:
+        rtl:
+          TOP_LIB:           ${GUA_PRJ}/verif/ip_tb/dtl_top_demo/rtl/filelist/top_lib.f
+          SUBSYS0_RTL_LIB:   ${GUA_PRJ}/verif/ip_tb/dtl_top_demo/rtl/filelist/subsys0.f
+          SUBSYS1_RTL_LIB:   ${GUA_PRJ}/verif/ip_tb/dtl_top_demo/rtl/filelist/subsys1.f
+          SUBSYS2_RTL_LIB:   ${GUA_PRJ}/verif/ip_tb/dtl_top_demo/rtl/filelist/subsys2.f
+      ela_opts:
+      type: UT
+
+suite:
+  dtl_demo_base_suite:
+    dump_opts: ${GUA_PRJ}/verif/ip_tb/dtl_top_demo/tcl/fsdb.tcl
+    session: dtl_top_demo
+    tests:
+      dtl_top_demo_base_test: +UVM_TESTNAME=dtl_top_demo_base_test
+
+  dtl_demo_sub_suite:
+    dump_opts: ${GUA_PRJ}/verif/ip_tb/dtl_top_demo/tcl/fsdb.tcl
+    dtl_base_test: dtl_top_demo_base_test
+    session: dtl_top_demo
+    tests:
+      dtl_top_demo_sub_test: +UVM_TESTNAME=dtl_top_demo_sub_test
+
+#suite:
+#  dtl_top_demo_base_suite:
+#    tst_opts: -f ${GUA_PRJ}/verif/ip_tb/dtl_top_demo/tst_top_base.f -sverilog -timescale=1ns/1ps -kdb=common_elab
+#    ela_opts:
+#      - tb_top dtl_top_demo_base_test_pkg
+#      - -dir=dtl_top_demo_base_pkg_LIB
+#      - -enable_dynamic_tb
+#      - -debug_acc+all -lca -kdb=common_elab
+#    session: dtl_top_demo
+#    timeout: 4000
+#    tag: sanity
+#    tests:
+#      dtl_top_demo_base_test: +UVM_TESTNAME=dtl_top_demo_base_test -ucli -i save.tcl +DUMP_FSDB
+#
+#  dtl_top_demo_test0_suite:
+#    tst_opts: -f ${GUA_PRJ}/verif/ip_tb/dtl_top_demo/tst_top_test0.f -sverilog -timescale=1ns/1ps -kdb=common_elab
+#    ela_opts:
+#      - -sharedlib=../dtl_top_demo_base_suite/dtl_top_demo_base_pkg_LIB -partcomp dtl_demo_test0_pkg
+#      - -dir=dtl_demo_test0_pkg_LIB -sverilog -timescale=1ns/1ns -dynamic_tb
+#      - -debug_acc+all -lca -kdb=common_elab
+#    session: dtl_top_demo
+#    dtl_base: dtl_top_demo_base_suite
+#    timeout: 4000
+#    tag: sanity
+#    tests:
+#      dtl_demo_test0: +gsimv2_dtl_basetest=dtl_top_demo_base_test +UVM_TESTNAME=dtl_demo_test0 -ucli -i restore.tcl +DUMP_FSDB +dtl_add_pkg=dtl_demo_test0_pkg_LIB:TST_LIB.dtl_demo_test0_pkg
+#
+#  dtl_top_demo_test1_suite:
+#    tst_opts: -f ${GUA_PRJ}/verif/ip_tb/dtl_top_demo/tst_top_test1.f -sverilog -timescale=1ns/1ps -kdb=common_elab
+#    ela_opts:
+#      - -sharedlib=../dtl_top_demo_base_suite/dtl_top_demo_base_pkg_LIB -partcomp dtl_demo_test1_pkg
+#      - -dir=dtl_demo_test1_pkg_LIB -sverilog -timescale=1ns/1ns -dynamic_tb
+#      - -debug_acc+all -lca -kdb=common_elab
+#    session: dtl_top_demo
+#    dtl_base: dtl_top_demo_base_suite
+#    timeout: 4000
+#    tag: sanity
+#    tests:
+#      dtl_demo_test1: +gsimv2_dtl_basetest=dtl_top_demo_base_test +UVM_TESTNAME=dtl_demo_test1 -ucli -i restore.tcl +DUMP_FSDB +dtl_add_pkg=dtl_demo_test1_pkg_LIB:TST_LIB.dtl_demo_test1_pkg
